@@ -3,9 +3,9 @@ DirectoryIndex jinin.cgi
 RewriteEngine on
 RewriteBase /
 
-RewriteRule ^(.+)\.jpg$ jinin.cgi?mode=html&tri=$1
-RewriteRule ^(.+)\.JPG$ jinin.cgi?mode=jpeg&tri=$1
-RewriteRule ^index.html$ jinin.cgi
+RewriteCond %{QUERY_STRING} (^|&)hash=([^&]+)($|&)
+RewriteRule .* - [E=X_QUERY_HASH:%2]
 
-ErrorDocument 404 /jinin.cgi
-ErrorDocument 500 /test.html
+RewriteRule ^(.+)\.jpg$ jinin.cgi?mode=html&tri=$1&hash=%{ENV:X_QUERY_HASH}
+RewriteRule ^(.+)\.JPG$ jinin.cgi?mode=jpeg&tri=$1&hash=%{ENV:X_QUERY_HASH}
+RewriteRule ^index.html$ jinin.cgi
